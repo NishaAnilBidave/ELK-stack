@@ -1,14 +1,14 @@
-#### bastion host data ####
-data "aws_ami" "bastion_host_ami" {
-  most_recent = true
+# #### bastion host data ####
+# data "aws_ami" "bastion_host_ami" {
+#   most_recent = true
 
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
+#   filter {
+#     name   = "name"
+#     values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+#   }
 
-  owners = ["099720109477"] # Canonical
-}
+#   owners = ["099720109477"] # Canonical
+# }
 
 ### vpc data ###
 data "aws_vpc" "lab_vpc" {
