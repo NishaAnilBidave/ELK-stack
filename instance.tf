@@ -24,17 +24,17 @@ resource "aws_instance" "elastiSearch" {
   }
 }
 
-######### logstach ######
+######### logstash ######
 
-resource "aws_instance" "lagstach" {
+resource "aws_instance" "lagstash" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
-  vpc_security_group_ids = [aws_security_group.logstach_server.id]
+  vpc_security_group_ids = [aws_security_group.logstash_server.id]
   key_name = "talent-academy-lab"
   subnet_id = data.aws_subnet.private1_subnet.id
 
   tags = {
-    Name = "logstach"
+    Name = "logstash"
   }
 }
 ####### demo server #######
@@ -48,5 +48,18 @@ resource "aws_instance" "demo_server" {
 
   tags = {
     Name = "demo_server"
+  }
+}
+
+####### kibana #########
+resource "aws_instance" "kiabna" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+  vpc_security_group_ids = [aws_security_group.kibana_server.id]
+  key_name = "talent-academy-lab"
+  subnet_id = data.aws_subnet.public_subnet.id
+
+  tags = {
+    Name = "kibana"
   }
 }

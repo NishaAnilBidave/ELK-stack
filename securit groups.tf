@@ -24,3 +24,21 @@ resource "aws_security_group" "bastion_host_server_sg" {
     Name = "bastion-host-server"
   }
 }
+######## Security group for kibana #####
+
+resource "aws_security_group" "kibana_server_sg" {
+  name        = "kiabna-server"
+  description = "Allow connection for kibana server."
+  vpc_id      =  data.aws_vpc.lab_vpc.id
+  ingress {
+    description = "Allow port 22"  ### have left here,confused what ports to open.
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "kibana-server"
+  }
+}
