@@ -1,8 +1,8 @@
-#Security group for Bastio Host server
+#Security group for Bastion Host server
 resource "aws_security_group" "bastion_host_server_sg" {
   name        = "bastion-host-server"
   description = "Allow connection for bastion host server."
-  vpc_id      = data.aws_vpc.vpc_group3.id
+  vpc_id      =  data.aws_vpc.lab_vpc.id
 
   ingress {
     description = "Allow port 22"

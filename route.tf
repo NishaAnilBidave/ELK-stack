@@ -30,12 +30,12 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_route_table_association" "private1" {
-  subnet_id      = aws_subnet.private.id
+  subnet_id      = aws_subnet.private1.id
   route_table_id = aws_route_table.nat_route_tbl.id
 }
 
 
 resource "aws_route_table_association" "private2" {
-  subnet_id      = aws_subnet.data.id
+  subnet_id      = aws_subnet.private2.id
   route_table_id = aws_route_table.nat_route_tbl.id
 }
