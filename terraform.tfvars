@@ -1,0 +1,5 @@
+vpc_name = "lab_vpc"
+vpc_cidr = "192.168.0.0/16"
+cidr_public = "192.168.1.0/24"
+cidr_private1 = "192.168.2.0/24"
+cidr_private2 = "192.168.3.0/24"
