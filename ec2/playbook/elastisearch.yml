@@ -1,0 +1,55 @@
+---
+- hosts: default
+  gather_facts: yes
+
+  pre_tasks:
+    - name: update apt cache if needed
+      become: yes
+      apt:
+        update_cache=yes
+        cache_valid_time=3600
+
+  tasks:
+    - name: Install Java Runtime Environment 
+      become: yes
+      apt:
+       name: default-jre
+       state: present
+
+  tasks:
+    - name: Install Java Runtime Environment 
+      become: yes
+      apt:
+       name: default-jdk
+       state: present
+
+  tasks:
+    - name: Download Elastic Deb Package
+      get_url:
+        url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.6.2-amd64.deb
+        dest: /tmp
+
+    - name: Install Elastic Deb Package
+      become: yes
+      apt:
+        deb: /tmp/elasticsearch-7.6.2-amd64.deb
+    
+    - name: Update Elastic Config (IP Address to 0.0.0.0)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'network.host'
+        line: 'network.host: 0.0.0.0'
+    
+    - name: Updating Elastic Config (Port Number)
+      become: yes
+      lineinfile:
+        destfile: /etc/elasticsearch/elasticsearch.yml
+        regexp: 'http.port'
+        line: 'http.port: 9200'
+     
+    - name: Start ElasticSearch Service
+      become: yes
+      service:
+        name: elasticsearch
+        state: started
