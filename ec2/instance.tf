@@ -14,7 +14,7 @@ resource "aws_instance" "bastion_server" {
 
 # ### KIBANA SERVER ##
 resource "aws_instance" "kibana_server" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = var.kibana_ami_id
   instance_type = "t3.micro"
   vpc_security_group_ids = [aws_security_group.kibana_server_sg.id]
   key_name               = "talent-academy-lab"
@@ -28,7 +28,7 @@ resource "aws_instance" "kibana_server" {
 
 ###### elastiSearch #########
 resource "aws_instance" "elastisearch_server" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = var.elasticsearch_ami_id
   instance_type = "m4.large"
   vpc_security_group_ids = [aws_security_group.elastisearch_server_sg.id]
   key_name = "talent-academy-lab"
@@ -42,7 +42,7 @@ resource "aws_instance" "elastisearch_server" {
 ######### logstash ######
 
 resource "aws_instance" "lagstash_server" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = var.logstash_ami_id
   instance_type = "m4.large"
   vpc_security_group_ids = [aws_security_group.logstash_server_sg.id]
   key_name = "talent-academy-lab"
@@ -55,7 +55,7 @@ resource "aws_instance" "lagstash_server" {
 ####### demo server 1 #######
 
 resource "aws_instance" "demo_server_1" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = var.beats_ami_id
   instance_type = "m4.large"
   vpc_security_group_ids = [aws_security_group.demo_server_sg.id]
   key_name = "talent-academy-lab"
@@ -66,34 +66,34 @@ resource "aws_instance" "demo_server_1" {
   }
 }
 
-####### demo server 2 #######
+# ####### demo server 2 #######
 
-resource "aws_instance" "demo_server_2" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "m4.large"
-  vpc_security_group_ids = [aws_security_group.demo_server_sg.id]
-  key_name = "talent-academy-lab"
-  subnet_id     = aws_subnet.app_private_subnet2.id
+# resource "aws_instance" "demo_server_2" {
+#   ami           = data.aws_ami.ubuntu.id
+#   instance_type = "m4.large"
+#   vpc_security_group_ids = [aws_security_group.demo_server_sg.id]
+#   key_name = "talent-academy-lab"
+#   subnet_id     = aws_subnet.app_private_subnet2.id
 
 
-  tags = {
-    Name = "demo_server_2"
-  }
-}
+#   tags = {
+#     Name = "demo_server_2"
+#   }
+# }
 
-####### demo server 3 #######
+# ####### demo server 3 #######
 
-resource "aws_instance" "demo_server_3" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "m4.large"
-  vpc_security_group_ids = [aws_security_group.demo_server_sg.id]
-  key_name = "talent-academy-lab"
-  subnet_id     = aws_subnet.app_private_subnet3.id
+# resource "aws_instance" "demo_server_3" {
+#   ami           = data.aws_ami.ubuntu.id
+#   instance_type = "m4.large"
+#   vpc_security_group_ids = [aws_security_group.demo_server_sg.id]
+#   key_name = "talent-academy-lab"
+#   subnet_id     = aws_subnet.app_private_subnet3.id
 
-  tags = {
-    Name = "demo_server_3"
-  }
-}
+#   tags = {
+#     Name = "demo_server_3"
+#   }
+# }
 
 resource "aws_eip" "bastion_eip" {
   instance = aws_instance.bastion_server.id
