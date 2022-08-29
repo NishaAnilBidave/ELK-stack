@@ -11,6 +11,10 @@ locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
+variable "instance_type" {
+  type    = string
+  default = "t2.micro"
+}
 
 variable "aws_region" {
   type    = string
@@ -27,18 +31,18 @@ variable "subnet_id" {
   default = "subnet-0c43c39861e2b0e92"
 }
 
-variable "packer_sg" {
+variable "security_group_id" {
   type    = string
-  default = "sg-0e2be1f5e4a45a734""
+  default = "sg-0e2be1f5e4a45a734"
 }
 
-source "amazon-ebs" "kibana" {
-  ami_name                    = "data.aws_ami.ubuntu.id"
-  instance_type               = t3.micro
+source "amazon-ebs" "elk-kibana" {
+  ami_name                    = "ami-kibana-${local.timestamp}"
+  instance_type               = var.instance_type
   region                      = var.aws_region
   vpc_id                      = var.vpc_id
   subnet_id                   = var.subnet_id
-  security_group_id           = var.packer_sg.id
+  security_group_id           = var.security_group_id
   deprecate_at                = "2023-07-29T23:59:59Z"
   associate_public_ip_address = true
   force_deregister            = "true"
@@ -65,18 +69,18 @@ build {
   sources = [
     "source.amazon-ebs.elk-kibana"
   ]
-  //   provisioner "ansible" {
-  //     playbook_file = "./playbooks/kibana.yml"
-  //   }
+  // provisioner "ansible" {
+  // playbook_file = "./playbook/kibana.yml"
+  // }
 }
 
-source "amazon-ebs" "elasticsearch" {
-  ami_name                    = "data.aws_ami.ubuntu.id"
-  instance_type               = m4.large
+source "amazon-ebs" "elk-es" {
+  ami_name                    = "ami-elasticsearch-${local.timestamp}"
+  instance_type               = var.instance_type
   region                      = var.aws_region
   vpc_id                      = var.vpc_id
   subnet_id                   = var.subnet_id
-  security_group_id           = var.packer_sg.id
+  security_group_id           = var.security_group_id
   deprecate_at                = "2023-07-29T23:59:59Z"
   associate_public_ip_address = true
   force_deregister            = "true"
@@ -103,17 +107,17 @@ build {
     "source.amazon-ebs.elk-es"
   ]
   provisioner "ansible" {
-    playbook_file = "./playbooks/es.yml"
+    playbook_file = "./playbook/elastisearch.yml"
   }
 }
 
-source "amazon-ebs" "logstash" {
-  ami_name                    = "data.aws_ami.ubuntu.id"
-  instance_type               = m4.large
+source "amazon-ebs" "elk-logstash" {
+  ami_name                    = "ami-logstash-${local.timestamp}"
+  instance_type               = var.instance_type
   region                      = var.aws_region
   vpc_id                      = var.vpc_id
   subnet_id                   = var.subnet_id
-  security_group_id           = var.packer_sg.id
+  security_group_id           = var.security_group_id
   deprecate_at                = "2023-07-29T23:59:59Z"
   associate_public_ip_address = true
   force_deregister            = "true"
@@ -133,7 +137,6 @@ source "amazon-ebs" "logstash" {
     Name = "logstash-ami"
   }
 }
-
 build {
   name = "packer-logstash"
   sources = [
@@ -142,5 +145,4 @@ build {
   // provisioner "ansible" {
   //   playbook_file = "./playbooks/logstash.yml"
   // }
-}
 }
